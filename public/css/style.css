@@ -1,8 +1,16 @@
 body {
    font-family: 'Open Sans', sans-serif;
+   overscroll-behavior: none;
 }
 
 /* Navbar Styles */
+#navbar-container {
+   position: fixed;
+   top: 0;
+   z-index: 2;
+   box-shadow: 0 0 10px rgb(220, 220, 220);
+}
+
 #navbar {
    height: 80px;
    background-color: white;
@@ -58,7 +66,7 @@ body {
 #articles-display {
    min-height: 100vh;
    background-color: rgb(245, 245, 245);
-   padding: 25px 50px;
+   padding: 100px 50px 25px 50px;
 }
 
 .article-card {
