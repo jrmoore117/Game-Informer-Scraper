@@ -24,15 +24,54 @@ mongoose.connect(MONGODB_URI, { useNewUrlParser: true });
 // =========================================================================================
 // Routes
 // =========================================================================================
-app.get("/", function(req, res) {
-   // test to see if server is up and running
-   res.send("Hello world!");
+app.get("/", function (req, res) {
+
+   // Request Game Informer site. Scrape all article titles.
+   request("https://www.gameinformer.com/", function (err, res, body) {
+      if (err) {
+         console.log("Error: ", error);
+      } else {
+
+         var $ = cheerio.load(body);
+
+         $(".article-summary").each(function (i, element) {
+
+            var articleInfo = {};
+
+            articleInfo.title = $(this)
+               .children(".article-title")
+               .children("a")
+               .text()
+               // Replaces all escape characters ("\n" and "\t") with an empty string
+               .replace(/(\n)/g, "")
+               .replace(/(\t)/g, "");
+
+               
+            articleInfo.summary = $(this)
+               .children(".promo-summary")
+               .text();
+
+            articleInfo.author = $(this)
+               .children(".author-details")
+               .children("a")
+               .text();
+
+            articleInfo.url = "https://www.gameinformer.com" + $(this)
+               .children(".article-title")
+               .children("a")
+               .attr("href");
+            
+            console.log(articleInfo);
+         });
+      }
+   })
+
 })
 
 
 // =========================================================================================
 // Start server
 // =========================================================================================
-app.listen(PORT, function() {
-  console.log("App running on port " + PORT + "!");
+app.listen(PORT, function () {
+   console.log("App running on port " + PORT + "!");
 });
