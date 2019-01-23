@@ -26,7 +26,7 @@ mongoose.connect(MONGODB_URI, { useNewUrlParser: true });
 // =========================================================================================
 app.get("/", function (req, res) {
 
-   // Request Game Informer site. Scrape all article titles.
+   // Request Game Informer site. Scrape all article titles, summaries, authors, and urls.
    request("https://www.gameinformer.com/", function (err, res, body) {
       if (err) {
          console.log("Error: ", error);
