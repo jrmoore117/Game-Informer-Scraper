@@ -24,5 +24,14 @@
 </div>
 
 <script>
+   $(".unsave-article").on("click", function() {
+      var id = $(this).attr("data-id");
 
+      $.ajax({
+         method: "PUT",
+         url: "/unsaveArticle/" + id
+      }).then(function(res) {
+         location.reload();
+      })
+   })
 </script>

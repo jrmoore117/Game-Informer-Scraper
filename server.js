@@ -140,6 +140,7 @@ app.put("/saveArticle/:id", function(req, res) {
 
 })
 
+// Route for rendering the "View Saved Articles" page
 app.get("/savedArticles", function(req, res) {
    db.Article.find({saved: true})
       .then(function(dbArticles) {
@@ -153,6 +154,19 @@ app.get("/savedArticles", function(req, res) {
       .catch(function(err) {
          console.log(err);
       })
+})
+
+// Route for 'unsaving' articles
+app.put("/unsaveArticle/:id", function(req, res) {
+
+   db.Article.findOneAndUpdate({_id: req.params.id}, {$set: {saved: false}})
+      .then(function(dbArticle) {
+         res.json(dbArticle);
+      })
+      .catch(function(err) {
+         console.log(err);
+      })
+
 })
 
 // =========================================================================================
