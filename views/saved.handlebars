@@ -38,6 +38,7 @@
          </div>
          <div class="modal-body">
             <div id="notes-display"></div>
+            <hr>
             <form id="new-note" data-id="">
                <label for="note-body">Note</label>
                <input type="text" name="note-body" id="note-body">
@@ -62,7 +63,25 @@
 
    $(".create-note").on("click", function() {
       var id = $(this).attr("data-id");
-      $("#new-note").attr("data-id", id)
+      $("#new-note").attr("data-id", id);
+
+      $.get("/article/" + id + "/notes").then(function(res) {
+         // console.log(res);
+         if (res.notes.length >= 1) {
+            $("#notes-display").empty();
+            var counter = 1;
+            res.notes.forEach(function(note) {
+               // console.log(note.body);
+               $("#notes-display").append(
+                  $("<p>").text(counter + ". " + note.body)
+               );
+               counter++;
+            });
+         } else {
+            $("#notes-display").empty();
+            $("#notes-display").text("There are no notes saved for this article.");
+         }
+      });
    })
 
    $("#new-note").on("submit", function(event) {

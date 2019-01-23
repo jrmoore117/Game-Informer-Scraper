@@ -175,12 +175,25 @@ app.put("/unsaveArticle/:id", function (req, res) {
 app.post("/newNote/:id", function (req, res) {
    console.log(req.params.id);
    console.log(req.body);
-   
+
    // Create a new note using the req.body
    db.Note.create(req.body)
       .then(function (dbNote) {
-         return db.Article.findOneAndUpdate({ _id: req.params.id }, { $push: { notes: dbNote._id }}, { new: true });
+         return db.Article.findOneAndUpdate({ _id: req.params.id }, { $push: { notes: dbNote._id } }, { new: true });
       })
+      .then(function (dbArticle) {
+         res.json(dbArticle);
+      })
+      .catch(function (err) {
+         res.json(err);
+      });
+})
+
+app.get("/article/:id/notes", function (req, res) {
+   console.log(req.params.id);
+
+   db.Article.findOne({ _id: req.params.id })
+      .populate("notes")
       .then(function (dbArticle) {
          res.json(dbArticle);
       })
