@@ -60,7 +60,7 @@ app.get("/scrape", function(req, res) {
          console.log("You have already scraped all the articles from Game Informer's home page!");
       } else {
          // Request Game Informer site. Scrape all article titles, summaries, authors, and urls.
-         request("https://www.gameinformer.com/", function (err, res, body) {
+         request("https://www.gameinformer.com/", function (err, response, body) {
             if (err) {
                console.log("Error: ", error);
             } else {
@@ -78,7 +78,6 @@ app.get("/scrape", function(req, res) {
                      // Replaces all escape characters ("\n" and "\t") with an empty string
                      .replace(/(\n)/g, "")
                      .replace(/(\t)/g, "");
-      
       
                   articleInfo.summary = $(this)
                      .children(".promo-summary")
@@ -110,6 +109,17 @@ app.get("/scrape", function(req, res) {
       console.log(err);
    })
 
+})
+
+app.get("/deleteArticles", function(req, res) {
+   db.Article.deleteMany({})
+      .then(function(result) {
+         console.log("Articles deleted!");
+         res.json(result);
+      })
+      .catch(function(err) {
+         console.log(err);
+      })
 })
 
 
