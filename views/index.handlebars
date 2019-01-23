@@ -18,17 +18,16 @@
    </div>
 </div>
 
-<div class="container-fluid" id="articles">
+<div class="container-fluid" id="articles-display">
    {{#each articles}}
-   <div class="card p-5">
-      <ul>
-         <li>Title: {{title}}</li>
-         <li>Summary: {{summary}}</li>
-         <li>By: {{author}}</li>
-         <li>Read <a href="{{url}}">here!</a></li>
-      </ul>
+   <div class="card article-card">
+      <a href="{{url}}">
+         <h2>{{title}}</h2>
+      </a>
+      <p><strong>Article Summary: </strong>{{summary}}</p>
+      <p><strong>Author: </strong>{{author}}</p>
       <div>
-         <button class="btn btn-danger save-article" data-id="{{id}}">Save Article</button>
+         <button class="article-button save-article" data-id="{{id}}">Save Article</button>
       </div>
    </div>
    {{/each}}
@@ -37,7 +36,7 @@
 <script>
    $("#clear-articles").on("click", function() {
       $.get("/deleteArticles").then(function(res) {
-        $("#articles").empty();
+        $("#articles-display").empty();
       })
    })
 
