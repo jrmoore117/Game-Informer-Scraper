@@ -10,11 +10,13 @@
          <a href="/">
             <div class="nav-button" id="home">Return Home</div>
          </a>
+         <div class="spacer"> | </div>
+         <div class="nav-button" id="clear-articles">Clear Articles</div>
       </div>
    </div>
 </div>
 
-<div class="container-fluid" id="articles">
+<div class="container-fluid" id="articles-display">
    {{#each articles}}
    <div class="card article-card">
       <a href="{{url}}">
@@ -24,7 +26,8 @@
       <p><strong>Author: </strong>{{author}}</p>
       <div>
          <button class="article-button unsave-article" data-id="{{id}}">Unsave Article</button>
-         <button type="button" class="article-button create-note" data-id="{{id}}" data-toggle="modal" data-target="#noteForm">Article Notes</button>
+         <button type="button" class="article-button create-note" data-id="{{id}}" data-toggle="modal" data-target="#noteForm">Article
+            Notes</button>
       </div>
    </div>
    {{/each}}
@@ -64,16 +67,16 @@
       })
    })
 
-   $(".create-note").on("click", function() {
+   $(".create-note").on("click", function () {
       var id = $(this).attr("data-id");
       $("#new-note").attr("data-id", id);
 
-      $.get("/article/" + id + "/notes").then(function(res) {
+      $.get("/article/" + id + "/notes").then(function (res) {
          // console.log(res);
          if (res.notes.length >= 1) {
             $("#notes-display").empty();
             var counter = 1;
-            res.notes.forEach(function(note) {
+            res.notes.forEach(function (note) {
                // console.log(note.body);
                $("#notes-display").append(
                   $("<p>").text(counter + ". " + note.body)
@@ -87,11 +90,11 @@
       });
    })
 
-   $("#new-note").on("submit", function(event) {
+   $("#new-note").on("submit", function (event) {
       event.preventDefault();
-     
+
       var id = $("#new-note").attr("data-id");
-     
+
       var noteData = {
          body: $("#note-body").val().trim()
       }
@@ -100,8 +103,14 @@
          method: "POST",
          url: "/newNote/" + id,
          data: noteData
-      }).then(function(res) {
-         console.log("Note successfully saved!");
+      }).then(function (res) {
+         location.reload();
+      })
+   })
+
+   $("#clear-articles").on("click", function () {
+      $.get("/deleteArticles").then(function (res) {
+         $("#articles-display").empty();
       })
    })
 </script>
