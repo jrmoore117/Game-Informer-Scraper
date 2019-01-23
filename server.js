@@ -102,6 +102,8 @@ app.get("/scrape", function(req, res) {
                      });
                });
             }
+
+            res.send("scrape complete!");
          })
       }
    })
