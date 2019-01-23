@@ -30,9 +30,11 @@ app.set("view engine", "handlebars");
 // =========================================================================================
 // Routes
 // =========================================================================================
+
+// Root route to load index.handlebars with any artlces in database
 app.get("/", function (req, res) {
 
-   db.Article.find({})
+   db.Article.find({saved: false})
       .then(function(dbArticles) {
 
          // console.log(dbArticles);
@@ -51,7 +53,7 @@ app.get("/", function (req, res) {
 
 })
 
-// Route for scraping all front-page articles if database is empty.
+// Route for scraping all front-page articles if database is empty
 app.get("/scrape", function(req, res) {
    
    db.Article.find({})
@@ -113,6 +115,7 @@ app.get("/scrape", function(req, res) {
 
 })
 
+// Route for deleting all articles from database
 app.get("/deleteArticles", function(req, res) {
    db.Article.deleteMany({})
       .then(function(result) {
@@ -122,6 +125,19 @@ app.get("/deleteArticles", function(req, res) {
       .catch(function(err) {
          console.log(err);
       })
+})
+
+// Route for updating a specific article, marking it as saved when "Save Article" button is clicked
+app.put("/saveArticle/:id", function(req, res) {
+
+   db.Article.findOneAndUpdate({_id: req.params.id}, {$set: {saved: true}})
+      .then(function(dbArticle) {
+         res.json(dbArticle);
+      })
+      .catch(function(err) {
+         console.log(err);
+      })
+
 })
 
 

@@ -19,6 +19,9 @@
          <li>By: {{author}}</li>
          <li>Read <a href="{{url}}">here!</a></li>
       </ul>
+      <div>
+         <button class="btn btn-danger save-article" data-id="{{id}}">Save Article</button>
+      </div>
    </div>
    {{/each}}
 </div>
@@ -33,6 +36,17 @@
    $("#scrape-articles").on("click", function() {
       $.get("/scrape").then(function(res) {
         location.reload();
+      })
+   })
+
+   $(".save-article").on("click", function() {
+      var id = $(this).attr("data-id");
+
+      $.ajax({
+         method: "PUT",
+         url: "saveArticle/" + id
+      }).then(function(res) {
+         location.reload();
       })
    })
 </script>
