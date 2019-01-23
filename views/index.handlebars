@@ -1,1 +1,24 @@
-<h1>Test -- Hello, world! -- Test</h1>
+<nav class="navbar navbar-light bg-light">
+   <div class="row">
+      <div class="col-6">
+         <a class="navbar-brand" href="#">Game Informer Scraper</a>
+      </div>
+      <div class="col-6">
+         <button class="btn btn-primary">Scrape Articles!</button>
+         <button class="btn btn-primary">Clear Articles!</button>
+      </div>
+   </div>
+</nav>
+
+<div class="container-fluid">
+   {{#each articles}}
+   <div class="card p-5">
+      <ul>
+         <li>Title: {{title}}</li>
+         <li>Summary: {{summary}}</li>
+         <li>By: {{author}}</li>
+         <li>Read <a href="{{url}}">here!</a></li>
+      </ul>
+   </div>
+   {{/each}}
+</div>

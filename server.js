@@ -19,11 +19,11 @@ app.use(express.static("public"));
 
 // Connect to the Mongo DB
 var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/gameInformerHeadlines";
-mongoose.connect(MONGODB_URI, { useNewUrlParser: true });
+mongoose.Promise = Promise;
+mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useCreateIndex: true });
 
 // Use Handlebars
 var exphbs = require("express-handlebars");
-
 app.engine("handlebars", exphbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
 
@@ -32,64 +32,84 @@ app.set("view engine", "handlebars");
 // =========================================================================================
 app.get("/", function (req, res) {
 
+   db.Article.find({})
+      .then(function(dbArticles) {
 
-   // db.Article.find({})
-   // .then(function(dbContent) {
-   //    if(dbContent.length > 0) {
-   //       console.log("You have already scraped all the articles from Game Informer's home page!");
-   //    } else {
-   //       // Request Game Informer site. Scrape all article titles, summaries, authors, and urls.
-   //       request("https://www.gameinformer.com/", function (err, res, body) {
-   //          if (err) {
-   //             console.log("Error: ", error);
-   //          } else {
+         // console.log(dbArticles);
+
+         // Prep object for handlebars
+         var articles = {
+            articles: dbArticles
+         }
+
+         // Render index.handlebars with Game Informer article data
+         res.render("index", articles);
+      })
+      .catch(function(err) {
+         console.log("Error: ", err);
+      })
+
+})
+
+// Route for scraping all front-page articles if database is empty.
+app.get("/scrape", function(req, res) {
+   
+   db.Article.find({})
+   .then(function(dbContent) {
+      if(dbContent.length > 0) {
+         console.log("You have already scraped all the articles from Game Informer's home page!");
+      } else {
+         // Request Game Informer site. Scrape all article titles, summaries, authors, and urls.
+         request("https://www.gameinformer.com/", function (err, res, body) {
+            if (err) {
+               console.log("Error: ", error);
+            } else {
       
-   //             var $ = cheerio.load(body);
+               var $ = cheerio.load(body);
       
-   //             $(".article-summary").each(function (i, element) {
+               $(".article-summary").each(function (i, element) {
       
-   //                var articleInfo = {};
+                  var articleInfo = {};
       
-   //                articleInfo.title = $(this)
-   //                   .children(".article-title")
-   //                   .children("a")
-   //                   .text()
-   //                   // Replaces all escape characters ("\n" and "\t") with an empty string
-   //                   .replace(/(\n)/g, "")
-   //                   .replace(/(\t)/g, "");
+                  articleInfo.title = $(this)
+                     .children(".article-title")
+                     .children("a")
+                     .text()
+                     // Replaces all escape characters ("\n" and "\t") with an empty string
+                     .replace(/(\n)/g, "")
+                     .replace(/(\t)/g, "");
       
       
-   //                articleInfo.summary = $(this)
-   //                   .children(".promo-summary")
-   //                   .text();
+                  articleInfo.summary = $(this)
+                     .children(".promo-summary")
+                     .text();
       
-   //                articleInfo.author = $(this)
-   //                   .children(".author-details")
-   //                   .children("a")
-   //                   .text();
+                  articleInfo.author = $(this)
+                     .children(".author-details")
+                     .children("a")
+                     .text();
       
-   //                articleInfo.url = "https://www.gameinformer.com" + $(this)
-   //                   .children(".article-title")
-   //                   .children("a")
-   //                   .attr("href");
+                  articleInfo.url = "https://www.gameinformer.com" + $(this)
+                     .children(".article-title")
+                     .children("a")
+                     .attr("href");
                   
-   //                db.Article.create(articleInfo)
-   //                   .then(function (dbArticle) {
-   //                      console.log(dbArticle);
-   //                   })
-   //                   .catch(function (err) {
-   //                      console.log(err);
-   //                   });
-   //             });
-   //          }
-   //       })
-   //    }
-   // })
-   // .catch(function(err) {
-   //    console.log(err);
-   // })
+                  db.Article.create(articleInfo)
+                     .then(function (dbArticle) {
+                        console.log(dbArticle);
+                     })
+                     .catch(function (err) {
+                        console.log(err);
+                     });
+               });
+            }
+         })
+      }
+   })
+   .catch(function(err) {
+      console.log(err);
+   })
 
-   res.render("index");
 })
 
 
