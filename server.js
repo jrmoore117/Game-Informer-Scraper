@@ -25,55 +25,64 @@ mongoose.connect(MONGODB_URI, { useNewUrlParser: true });
 // Routes
 // =========================================================================================
 app.get("/", function (req, res) {
-
-   // Request Game Informer site. Scrape all article titles, summaries, authors, and urls.
-   request("https://www.gameinformer.com/", function (err, res, body) {
-      if (err) {
-         console.log("Error: ", error);
+   db.Article.find({})
+   .then(function(dbContent) {
+      if(dbContent.length > 0) {
+         console.log("You have already scraped all the articles from Game Informer's home page!");
       } else {
-
-         var $ = cheerio.load(body);
-
-         $(".article-summary").each(function (i, element) {
-
-            var articleInfo = {};
-
-            articleInfo.title = $(this)
-               .children(".article-title")
-               .children("a")
-               .text()
-               // Replaces all escape characters ("\n" and "\t") with an empty string
-               .replace(/(\n)/g, "")
-               .replace(/(\t)/g, "");
-
-
-            articleInfo.summary = $(this)
-               .children(".promo-summary")
-               .text();
-
-            articleInfo.author = $(this)
-               .children(".author-details")
-               .children("a")
-               .text();
-
-            articleInfo.url = "https://www.gameinformer.com" + $(this)
-               .children(".article-title")
-               .children("a")
-               .attr("href");
-
-            db.Article.create(articleInfo)
-               .then(function (dbArticle) {
-                  // View the added result in the console
-                  console.log(dbArticle);
-               })
-               .catch(function (err) {
-                  // If an error occurred, log it
-                  console.log(err);
+         // Request Game Informer site. Scrape all article titles, summaries, authors, and urls.
+         request("https://www.gameinformer.com/", function (err, res, body) {
+            if (err) {
+               console.log("Error: ", error);
+            } else {
+      
+               var $ = cheerio.load(body);
+      
+               $(".article-summary").each(function (i, element) {
+      
+                  var articleInfo = {};
+      
+                  articleInfo.title = $(this)
+                     .children(".article-title")
+                     .children("a")
+                     .text()
+                     // Replaces all escape characters ("\n" and "\t") with an empty string
+                     .replace(/(\n)/g, "")
+                     .replace(/(\t)/g, "");
+      
+      
+                  articleInfo.summary = $(this)
+                     .children(".promo-summary")
+                     .text();
+      
+                  articleInfo.author = $(this)
+                     .children(".author-details")
+                     .children("a")
+                     .text();
+      
+                  articleInfo.url = "https://www.gameinformer.com" + $(this)
+                     .children(".article-title")
+                     .children("a")
+                     .attr("href");
+      
+                  
+                  db.Article.create(articleInfo)
+                     .then(function (dbArticle) {
+                        // View the added result in the console
+                        console.log(dbArticle);
+                     })
+                     .catch(function (err) {
+                        // If an error occurred, log it
+                        console.log(err);
+                     });
                });
-         });
+            }
+         })
       }
    })
-
+   .catch(function(err) {
+      console.log(err);
+   })
 })
 
 
