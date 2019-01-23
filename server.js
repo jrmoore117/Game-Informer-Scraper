@@ -120,6 +120,15 @@ app.get("/deleteArticles", function (req, res) {
    db.Article.deleteMany({})
       .then(function (result) {
          console.log("Articles deleted!");
+         // res.json(result);
+      })
+      .catch(function (err) {
+         console.log(err);
+      })
+
+   db.Note.deleteMany({})
+      .then(function (result) {
+         console.log("Notes deleted!");
          res.json(result);
       })
       .catch(function (err) {
