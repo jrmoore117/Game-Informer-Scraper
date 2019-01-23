@@ -140,6 +140,20 @@ app.put("/saveArticle/:id", function(req, res) {
 
 })
 
+app.get("/savedArticles", function(req, res) {
+   db.Article.find({saved: true})
+      .then(function(dbArticles) {
+
+         var articles = {
+            articles: dbArticles
+         }
+
+         res.render("saved", articles);
+      })
+      .catch(function(err) {
+         console.log(err);
+      })
+})
 
 // =========================================================================================
 // Start server

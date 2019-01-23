@@ -1,0 +1,28 @@
+<nav class="navbar navbar-light bg-light">
+   <div class="row">
+      <a class="navbar-brand" href="#">Game Informer Scraper</a>
+      <a href="/">
+         <button class="btn btn-primary" id="home">Home</button>
+      </a>
+   </div>
+</nav>
+
+<div class="container-fluid" id="articles">
+   {{#each articles}}
+   <div class="card p-5">
+      <ul>
+         <li>Title: {{title}}</li>
+         <li>Summary: {{summary}}</li>
+         <li>By: {{author}}</li>
+         <li>Read <a href="{{url}}">here!</a></li>
+      </ul>
+      <div>
+         <button class="btn btn-danger unsave-article" data-id="{{id}}">Unsave Article</button>
+      </div>
+   </div>
+   {{/each}}
+</div>
+
+<script>
+
+</script>
