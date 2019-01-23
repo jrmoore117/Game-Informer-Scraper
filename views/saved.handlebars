@@ -19,19 +19,67 @@
       <div>
          <button class="btn btn-danger unsave-article" data-id="{{id}}">Unsave Article</button>
       </div>
+      <div>
+         <button type="button" class="btn btn-primary create-note" data-id="{{id}}" data-toggle="modal" data-target="#noteForm">Article Notes</button>
+      </div>
    </div>
    {{/each}}
 </div>
 
+{{!-- Modal --}}
+<div class="modal fade" id="noteForm" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+   <div class="modal-dialog" role="document">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">New Note</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+               <span aria-hidden="true">&times;</span>
+            </button>
+         </div>
+         <div class="modal-body">
+            <div id="notes-display"></div>
+            <form id="new-note" data-id="">
+               <label for="note-body">Note</label>
+               <input type="text" name="note-body" id="note-body">
+               <button id="submit-new-note" type="submit" data-id="" class="btn btn-primary">Submit</button>
+            </form>
+         </div>
+      </div>
+   </div>
+</div>
+
 <script>
-   $(".unsave-article").on("click", function() {
+   $(".unsave-article").on("click", function () {
       var id = $(this).attr("data-id");
 
       $.ajax({
          method: "PUT",
          url: "/unsaveArticle/" + id
-      }).then(function(res) {
+      }).then(function (res) {
          location.reload();
+      })
+   })
+
+   $(".create-note").on("click", function() {
+      var id = $(this).attr("data-id");
+      $("#new-note").attr("data-id", id)
+   })
+
+   $("#new-note").on("submit", function(event) {
+      event.preventDefault();
+     
+      var id = $("#new-note").attr("data-id");
+     
+      var noteData = {
+         body: $("#note-body").val().trim()
+      }
+
+      $.ajax({
+         method: "POST",
+         url: "/newNote/" + id,
+         data: noteData
+      }).then(function(res) {
+         console.log("Note successfully saved!");
       })
    })
 </script>
