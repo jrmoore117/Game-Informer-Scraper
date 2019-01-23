@@ -95,3 +95,25 @@ body {
    color: white;
    background-color: rgb(37,104,222);
 }
+
+.article-button:focus {
+   outline: 0;
+}
+
+.unsave-article {
+   margin-right: 5px;
+}
+
+#modalLabel {
+   color: rgb(37,104,222);
+}
+
+.form-item {
+   display: block;
+   margin: 0;
+}
+
+#note-body {
+   height: 35px;
+   margin: 15px 0;
+}

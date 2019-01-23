@@ -16,29 +16,26 @@
 
 <div class="container-fluid" id="articles">
    {{#each articles}}
-   <div class="card p-5">
-      <ul>
-         <li>Title: {{title}}</li>
-         <li>Summary: {{summary}}</li>
-         <li>By: {{author}}</li>
-         <li>Read <a href="{{url}}">here!</a></li>
-      </ul>
+   <div class="card article-card">
+      <a href="{{url}}">
+         <h2>{{title}}</h2>
+      </a>
+      <p><strong>Article Summary: </strong>{{summary}}</p>
+      <p><strong>Author: </strong>{{author}}</p>
       <div>
-         <button class="btn btn-danger unsave-article" data-id="{{id}}">Unsave Article</button>
-      </div>
-      <div>
-         <button type="button" class="btn btn-primary create-note" data-id="{{id}}" data-toggle="modal" data-target="#noteForm">Article Notes</button>
+         <button class="article-button unsave-article" data-id="{{id}}">Unsave Article</button>
+         <button type="button" class="article-button create-note" data-id="{{id}}" data-toggle="modal" data-target="#noteForm">Article Notes</button>
       </div>
    </div>
    {{/each}}
 </div>
 
 {{!-- Modal --}}
-<div class="modal fade" id="noteForm" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="noteForm" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
    <div class="modal-dialog" role="document">
       <div class="modal-content">
          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">New Note</h5>
+            <h4 class="modal-title" id="modalLabel"><strong>Notes</strong></h4>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                <span aria-hidden="true">&times;</span>
             </button>
@@ -47,9 +44,8 @@
             <div id="notes-display"></div>
             <hr>
             <form id="new-note" data-id="">
-               <label for="note-body">Note</label>
-               <input type="text" name="note-body" id="note-body">
-               <button id="submit-new-note" type="submit" data-id="" class="btn btn-primary">Submit</button>
+               <input type="text" name="note-body" class="form-item" id="note-body" placeholder="New note">
+               <button id="submit-new-note" type="submit" data-id="" class="article-button form-item">Submit</button>
             </form>
          </div>
       </div>
