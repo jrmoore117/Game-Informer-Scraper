@@ -1,13 +1,22 @@
-<nav class="navbar navbar-light bg-light">
-   <div class="row">
-      <a class="navbar-brand" href="#">Game Informer Scraper</a>
-      <a href="/savedArticles">
-         <button class="btn btn-primary" id="saved-articles">View Saved Articles</button>
-      </a>
-      <button class="btn btn-primary" id="scrape-articles">Scrape Articles</button>
-      <button class="btn btn-danger" id="clear-articles">Clear Articles</button>
+<div class="container-fluid">
+   <div class="row" id="navbar">
+      <div class="col-6">
+         <div id="logo-container">
+            <img src="images/gi-logo.svg" id="gi-logo" alt="gi-logo">
+            <div>Article Scraper</div>
+         </div>
+      </div>
+      <div class="col-6" id="nav-buttons">
+         <a href="/savedArticles">
+            <div class="nav-button" id="saved-articles">View Saved Articles</div>
+         </a>
+         <div class="spacer"> | </div>
+         <div class="nav-button" id="scrape-articles">Scrape Articles</div>
+         <div class="spacer"> | </div>
+         <div class="nav-button" id="clear-articles">Clear Articles</div>
+      </div>
    </div>
-</nav>
+</div>
 
 <div class="container-fluid" id="articles">
    {{#each articles}}
