@@ -46,7 +46,7 @@ app.get("/", function (req, res) {
                .replace(/(\n)/g, "")
                .replace(/(\t)/g, "");
 
-               
+
             articleInfo.summary = $(this)
                .children(".promo-summary")
                .text();
@@ -60,7 +60,7 @@ app.get("/", function (req, res) {
                .children(".article-title")
                .children("a")
                .attr("href");
-            
+
             console.log(articleInfo);
          });
       }

@@ -5,27 +5,27 @@ var Schema = mongoose.Schema;
 var ArticleSchema = new Schema({
 
    title: {
-    type: String,
-    required: true
-  },
-  summary: {
-   type: String,
-   required: true
-  },
-  author: {
-     type: String,
-     required: true
-  },
-  url: {
-    type: String,
-    required: true
-  },
-  notes: [
-     {
-       type: Schema.Types.ObjectId,
-       ref: "Note"
-     }
-  ]
+      type: String,
+      required: true
+   },
+   summary: {
+      type: String,
+      required: true
+   },
+   author: {
+      type: String,
+      required: true
+   },
+   url: {
+      type: String,
+      required: true
+   },
+   notes: [
+      {
+         type: Schema.Types.ObjectId,
+         ref: "Note"
+      }
+   ]
 });
 
 var Article = mongoose.model("Article", ArticleSchema);
